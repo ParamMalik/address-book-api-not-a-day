@@ -27,9 +27,9 @@ public class AddressBookController {
 
 
     @ApiOperation("Get All Data From the database")
-    @GetMapping("/search/{isRemote}")
+    @GetMapping("/search/{connectToExternalMachine}")
     @CrossOrigin(origins = "http://10.50.2.203:8080")
-    public ResponseEntity<List<ContactDTO>> getAllAddressBook(@PathVariable(name = "isRemote") String isRemote) {
+    public ResponseEntity<List<ContactDTO>> getAllAddressBook(@PathVariable(name = "connectToExternalMachine") String isRemote) {
         if (isRemote.equals("y")) {
             return ResponseEntity.ok(List.of(externalAddressBookService.getContactList()));
         } else {
@@ -40,8 +40,8 @@ public class AddressBookController {
     // Get List Of Contacts by firstName
 
     @ApiOperation("Get Data On the basis of Name")
-    @GetMapping("/search/{firstName}/{isRemote}")
-    public ResponseEntity<List<ContactDTO>> getAddressByFirstName(@PathVariable("firstName") String firstName, @PathVariable(name = "isRemote") String isRemote) {
+    @GetMapping("/search/{firstName}/{connectToExternalMachine}")
+    public ResponseEntity<List<ContactDTO>> getAddressByFirstName(@PathVariable("firstName") String firstName, @PathVariable(name = "connectToExternalMachine") String isRemote) {
         if (isRemote.equals("y")) {
             return ResponseEntity.ok(List.of(externalAddressBookService.getContactListByFirstName(firstName)));
         } else {
@@ -52,8 +52,8 @@ public class AddressBookController {
     }
 
     @ApiOperation("Save New Contact In the database")
-    @PostMapping(path = "/save/{isRemote}")
-    public ResponseEntity<ContactDTO> saveAddress(@Valid @RequestBody ContactDTO contactDTO, @PathVariable(name = "isRemote") String isRemote) {
+    @PostMapping(path = "/save/{connectToExternalMachine}")
+    public ResponseEntity<ContactDTO> saveAddress(@Valid @RequestBody ContactDTO contactDTO, @PathVariable(name = "connectToExternalMachine") String isRemote) {
         if (isRemote.equals("y")) {
             return new ResponseEntity<>(externalAddressBookService.saveContact(contactDTO), HttpStatus.OK);
         } else {
@@ -64,8 +64,8 @@ public class AddressBookController {
     }
 
     @ApiOperation("Delete On the basis of Contact ID")
-    @PutMapping(path = "/update/{contactId}/{isRemote}")
-    public ResponseEntity<String> updateAddressBook(@PathVariable Long contactId, @PathVariable(name = "isRemote") String isRemote) {
+    @PutMapping(path = "/update/{contactId}/{connectToExternalMachine}")
+    public ResponseEntity<String> updateAddressBook(@PathVariable Long contactId, @PathVariable(name = "connectToExternalMachine") String isRemote) {
         if (isRemote.equals("y")) {
             externalAddressBookService.deleteContact(contactId);
         } else {
