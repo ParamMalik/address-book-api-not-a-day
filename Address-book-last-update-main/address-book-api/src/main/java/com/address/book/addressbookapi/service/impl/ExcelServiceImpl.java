@@ -1,7 +1,7 @@
 package com.address.book.addressbookapi.service.impl;
 
 import com.address.book.addressbookapi.bulkdatasave.JdbcTemplateBulkOperations;
-import com.address.book.addressbookapi.controller.ExcelController;
+import com.address.book.addressbookapi.controller.ExcelUploadDownloadController;
 import com.address.book.addressbookapi.dto.ContactDTO;
 import com.address.book.addressbookapi.entity.ContactEntity;
 import com.address.book.addressbookapi.exception.customexception.EmptyDatabaseException;
@@ -51,7 +51,7 @@ public class ExcelServiceImpl implements ExcelService {
     public void uploadExcelDataToDatabase(MultipartFile multipartFile) throws IOException {
         List<ContactEntity> contactEntityList = ExcelHelper.convertExcelToListOfProduct(multipartFile.getInputStream());
 
-        Logger logger = LoggerFactory.logger(ExcelController.class);
+        Logger logger = LoggerFactory.logger(ExcelUploadDownloadController.class);
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         jdbcTemplateBulkOperations.bulkPersist(contactEntityList);
