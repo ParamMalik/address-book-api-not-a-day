@@ -8,4 +8,5 @@ import java.io.IOException;
 public interface ExcelService {
     ByteArrayInputStream loadDataFromDatabase();
     void uploadExcelToDatabase(MultipartFile multipartFile) throws IOException;
+    void uploadExcelDataToDatabase(MultipartFile multipartFile) throws IOException;
 }
