@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "address.update",
+      "type": "java.lang.String",
+      "description": "Description for address.update."
+    },
+    {
+      "name": "address.uri",
+      "type": "java.lang.String",
+      "description": "Description for address.uri."
+    }
+  ] }
