@@ -4,7 +4,7 @@ import com.address.book.addressbookapi.dto.ContactDTO;
 
 import java.util.List;
 
-public interface AddressBookService {
+public interface AddressBookInternalService {
 
     // To add a new Contact
     ContactDTO saveAddress(ContactDTO contactDTO);

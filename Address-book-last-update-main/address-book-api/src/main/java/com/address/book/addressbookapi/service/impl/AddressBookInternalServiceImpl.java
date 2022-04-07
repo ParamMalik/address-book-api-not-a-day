@@ -7,14 +7,14 @@ import com.address.book.addressbookapi.exception.customexception.ContactNotFound
 import com.address.book.addressbookapi.exception.customexception.EmptyDatabaseException;
 import com.address.book.addressbookapi.mapper.DtoAndEntityMapper;
 import com.address.book.addressbookapi.repo.ContactRepository;
-import com.address.book.addressbookapi.service.AddressBookService;
+import com.address.book.addressbookapi.service.AddressBookInternalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class AddressBookServiceImpl implements AddressBookService {
+public class AddressBookInternalServiceImpl implements AddressBookInternalService {
 
     @Autowired
     private ContactRepository contactRepository;

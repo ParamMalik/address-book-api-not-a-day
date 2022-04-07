@@ -1,8 +1,7 @@
 package com.address.book.addressbookapi.controller;
 
+import com.address.book.addressbookapi.commonservice.impl.AddressBookCommonServiceImpl;
 import com.address.book.addressbookapi.dto.ContactDTO;
-import com.address.book.addressbookapi.externalservice.impl.ExternalAddressBookServiceImpl;
-import com.address.book.addressbookapi.service.impl.AddressBookServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,68 +9,51 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
-//@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 public class AddressBookController {
 
     @Autowired
-    private AddressBookServiceImpl addressBookService;
-
-    @Autowired
-    private ExternalAddressBookServiceImpl externalAddressBookService;
+    private AddressBookCommonServiceImpl addressBookCommonService;
 
 
     // Get List Of All Contacts
-
-
     @ApiOperation("Get All Data From the database")
     @GetMapping("/search/{connectToExternalMachine}")
     @CrossOrigin(origins = "http://10.50.2.203:8080")
-    public ResponseEntity<List<ContactDTO>> getAllAddressBook(@PathVariable(name = "connectToExternalMachine") String isRemote) {
-        if (isRemote.equals("y")) {
-            return ResponseEntity.ok(List.of(externalAddressBookService.getContactList()));
-        } else {
-            return ResponseEntity.ok(addressBookService.getListOfAddress());
-        }
+    public ResponseEntity<List<ContactDTO>> getAllContactsFromAddressBook(@NotNull @PathVariable(name = "connectToExternalMachine") Boolean isConnectingToExternalMachine) {
+
+        return ResponseEntity.ok(addressBookCommonService.getAllAddressBook(isConnectingToExternalMachine));
+
     }
+
 
     // Get List Of Contacts by firstName
-
     @ApiOperation("Get Data On the basis of Name")
     @GetMapping("/search/{firstName}/{connectToExternalMachine}")
-    public ResponseEntity<List<ContactDTO>> getAddressByFirstName(@PathVariable("firstName") String firstName, @PathVariable(name = "connectToExternalMachine") String isRemote) {
-        if (isRemote.equals("y")) {
-            return ResponseEntity.ok(List.of(externalAddressBookService.getContactListByFirstName(firstName)));
-        } else {
-            return ResponseEntity.ok(addressBookService.findAddressByFirstName(firstName));
-        }
+    public ResponseEntity<List<ContactDTO>> getContactsByFirstName(@NotNull @PathVariable("firstName") String firstName,@NotNull  @PathVariable(name = "connectToExternalMachine") Boolean isConnectingToExternalMachine) {
 
+        return ResponseEntity.ok(addressBookCommonService.getAddressByFirstName(firstName, isConnectingToExternalMachine));
 
     }
 
+    // Save New Contact To address book
     @ApiOperation("Save New Contact In the database")
     @PostMapping(path = "/save/{connectToExternalMachine}")
-    public ResponseEntity<ContactDTO> saveAddress(@Valid @RequestBody ContactDTO contactDTO, @PathVariable(name = "connectToExternalMachine") String isRemote) {
-        if (isRemote.equals("y")) {
-            return new ResponseEntity<>(externalAddressBookService.saveContact(contactDTO), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(addressBookService.saveAddress(contactDTO), HttpStatus.OK);
-        }
+    public ResponseEntity<ContactDTO> saveNewContactToAddressBook(@Valid @RequestBody ContactDTO contactDTO,@NotNull @PathVariable(name = "connectToExternalMachine") Boolean isConnectingToExternalMachine) {
 
+        return new ResponseEntity<>(addressBookCommonService.saveAddress(contactDTO, isConnectingToExternalMachine), HttpStatus.OK);
 
     }
 
+    // Partial Delete Contact From Address Book
     @ApiOperation("Delete On the basis of Contact ID")
     @PutMapping(path = "/update/{contactId}/{connectToExternalMachine}")
-    public ResponseEntity<String> updateAddressBook(@PathVariable Long contactId, @PathVariable(name = "connectToExternalMachine") String isRemote) {
-        if (isRemote.equals("y")) {
-            externalAddressBookService.deleteContact(contactId);
-        } else {
-            addressBookService.deleteContact(contactId);
-        }
-        return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
+    public void deleteContactFromAddressBook(@NotNull @PathVariable Long contactId,@NotNull  @PathVariable(name = "connectToExternalMachine") Boolean isConnectingToExternalMachine) {
+
+        addressBookCommonService.updateAddressBook(contactId, isConnectingToExternalMachine);
 
 
     }
