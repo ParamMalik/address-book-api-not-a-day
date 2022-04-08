@@ -10,6 +10,7 @@ import com.address.book.addressbookapi.mapper.DtoAndEntityMapper;
 import com.address.book.addressbookapi.repo.ContactRepository;
 import com.address.book.addressbookapi.service.ExcelService;
 import com.poiji.bind.Poiji;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
@@ -27,11 +28,12 @@ import java.util.List;
 import static org.jboss.logging.Logger.Level.INFO;
 import static org.jboss.logging.Logger.Level.WARN;
 
+@Slf4j
 @Service
 
 public class ExcelServiceImpl implements ExcelService {
     @Autowired
-    private ContactRepository repository;
+    ContactRepository repository;
 
     @Autowired
     JdbcTemplateBulkOperations jdbcTemplateBulkOperations;
@@ -39,6 +41,7 @@ public class ExcelServiceImpl implements ExcelService {
 
     @Override
     public ByteArrayInputStream loadDataFromDatabase() {
+        log.info("Executing loadDataFromDatabase() method of ExcelServiceImpl class");
         List<ContactEntity> contacts = repository.findAll();
         if (contacts.isEmpty()) {
             throw new EmptyDatabaseException();
@@ -50,6 +53,7 @@ public class ExcelServiceImpl implements ExcelService {
 
     @Override
     public void uploadExcelDataToDatabase(MultipartFile multipartFile) throws IOException {
+        log.info("Executing uploadExcelDataToDatabase() method of ExcelServiceImpl class");
         List<ContactEntity> contactEntityList = ExcelHelper.convertExcelToListOfProduct(multipartFile.getInputStream());
 
         Logger logger = LoggerFactory.logger(ExcelUploadDownloadController.class);
@@ -65,6 +69,7 @@ public class ExcelServiceImpl implements ExcelService {
 
     @Override
     public void uploadExcelToDatabase(MultipartFile multipartFile) throws IOException {
+        log.info("Executing uploadExcelDataToDatabase() method of ExcelServiceImpl class");
         InputStream inputStream = multipartFile.getInputStream();
         XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
 

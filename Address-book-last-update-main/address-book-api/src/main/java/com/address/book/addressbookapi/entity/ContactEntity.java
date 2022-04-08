@@ -24,7 +24,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 public class ContactEntity {
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "seqGen")
-    @SequenceGenerator(name = "seqGen", sequenceName = "seq", initialValue = 1)
+    @SequenceGenerator(name = "seqGen", sequenceName = "seq")
     private Long contactId;
 
 

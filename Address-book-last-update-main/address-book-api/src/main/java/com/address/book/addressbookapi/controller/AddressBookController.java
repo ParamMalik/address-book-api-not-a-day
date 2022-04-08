@@ -16,43 +16,44 @@ import java.util.List;
 public class AddressBookController {
 
     @Autowired
-    private AddressBookCommonServiceImpl addressBookCommonService;
+    AddressBookCommonServiceImpl addressBookCommonService;
 
 
     // Get List Of All Contacts
+
     @ApiOperation("Get All Data From the database")
     @GetMapping("/search/{connectToExternalMachine}")
     @CrossOrigin(origins = "http://10.50.2.203:8080")
-    public ResponseEntity<List<ContactDTO>> getAllContactsFromAddressBook(@NotNull @PathVariable(name = "connectToExternalMachine") Boolean isConnectingToExternalMachine) {
+    public ResponseEntity<List<ContactDTO>> getAllContactsFromAddressBook(@NotNull @PathVariable(name = "connectToExternalMachine") boolean isConnectingToExternalMachine) {
 
-        return ResponseEntity.ok(addressBookCommonService.getAllAddressBook(isConnectingToExternalMachine));
+        return new ResponseEntity<>(addressBookCommonService.getAllAddressBook(isConnectingToExternalMachine), HttpStatus.OK);
 
     }
 
 
     // Get List Of Contacts by firstName
+
     @ApiOperation("Get Data On the basis of Name")
     @GetMapping("/search/{firstName}/{connectToExternalMachine}")
-    public ResponseEntity<List<ContactDTO>> getContactsByFirstName(@NotNull @PathVariable("firstName") String firstName,@NotNull  @PathVariable(name = "connectToExternalMachine") Boolean isConnectingToExternalMachine) {
-
-        return ResponseEntity.ok(addressBookCommonService.getAddressByFirstName(firstName, isConnectingToExternalMachine));
+    public ResponseEntity<List<ContactDTO>> getContactsByFirstName(@NotNull @PathVariable("firstName") String firstName, @NotNull @PathVariable(name = "connectToExternalMachine") boolean isConnectingToExternalMachine) {
+        return new ResponseEntity<>(addressBookCommonService.getAddressByFirstName(firstName, isConnectingToExternalMachine), HttpStatus.OK);
 
     }
 
     // Save New Contact To address book
+
     @ApiOperation("Save New Contact In the database")
     @PostMapping(path = "/save/{connectToExternalMachine}")
-    public ResponseEntity<ContactDTO> saveNewContactToAddressBook(@Valid @RequestBody ContactDTO contactDTO,@NotNull @PathVariable(name = "connectToExternalMachine") Boolean isConnectingToExternalMachine) {
-
+    public ResponseEntity<ContactDTO> saveNewContactToAddressBook(@Valid @RequestBody ContactDTO contactDTO, @NotNull @PathVariable(name = "connectToExternalMachine") boolean isConnectingToExternalMachine) {
         return new ResponseEntity<>(addressBookCommonService.saveAddress(contactDTO, isConnectingToExternalMachine), HttpStatus.OK);
 
     }
 
     // Partial Delete Contact From Address Book
+
     @ApiOperation("Delete On the basis of Contact ID")
     @PutMapping(path = "/update/{contactId}/{connectToExternalMachine}")
-    public void deleteContactFromAddressBook(@NotNull @PathVariable Long contactId,@NotNull  @PathVariable(name = "connectToExternalMachine") Boolean isConnectingToExternalMachine) {
-
+    public void deleteContactFromAddressBook(@NotNull @PathVariable Long contactId, @NotNull @PathVariable(name = "connectToExternalMachine") boolean isConnectingToExternalMachine) {
         addressBookCommonService.updateAddressBook(contactId, isConnectingToExternalMachine);
 
 

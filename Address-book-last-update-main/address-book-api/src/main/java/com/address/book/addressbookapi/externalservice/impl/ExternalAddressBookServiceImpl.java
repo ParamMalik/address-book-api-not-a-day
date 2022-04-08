@@ -5,6 +5,7 @@ import com.address.book.addressbookapi.externalservice.ExternalAddressBookServic
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -16,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-
+@Slf4j
 @Service
 public class ExternalAddressBookServiceImpl implements ExternalAddressBookService {
 
@@ -25,34 +26,36 @@ public class ExternalAddressBookServiceImpl implements ExternalAddressBookServic
     @Autowired
     RestTemplate restTemplate;
 
-    @Value("${address.uri}")
-    private String uri;
+    @Value("${externalAddressBook.uri}")
+    String uri;
 
 
     // Search
     @Override
     @SneakyThrows
     public ContactDTO[] getContactList() {
-        String addressList = restTemplate.getForObject(uri + "/getAllCustomer/isRemote=n", String.class);
+        log.info("Executing getContactList() method of ExternalAddressBookServiceImpl class");
+        String addressList = restTemplate.getForObject(uri + "/getAllContact/false", String.class);
         return objectMapper.readValue(addressList, ContactDTO[].class);
     }
 
     // Update
     @Override
     public void deleteContact(Long id) {
+        log.info("Executing deleteContact() method of ExternalAddressBookServiceImpl class");
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        restTemplate.exchange(uri + "/updateCustomer/" + id + "/isRemote=n", HttpMethod.PUT, entity, String.class);
+        restTemplate.exchange(uri + "/partialUpdateContact/" + id + "/false", HttpMethod.PUT, entity, String.class);
     }
 
     // Find By First Name
     @Override
     @SneakyThrows
     public ContactDTO[] getContactListByFirstName(String firstName) {
-
-        String addressString = restTemplate.getForObject(uri + "/getCustomer/" + firstName + "/isRemote=n", String.class);
+        log.info("Executing getContactListByFirstName() method of ExternalAddressBookServiceImpl class");
+        String addressString = restTemplate.getForObject(uri + "/getContactByName/" + firstName + "/false", String.class);
         return objectMapper.readValue(addressString, ContactDTO[].class);
 
     }
@@ -60,7 +63,7 @@ public class ExternalAddressBookServiceImpl implements ExternalAddressBookServic
     // Save
     @Override
     public ContactDTO saveContact(ContactDTO contact) {
-
+        log.info("Executing saveContact() method of ExternalAddressBookServiceImpl class");
 
         HttpHeaders httpHeaders = new HttpHeaders();
 
@@ -71,7 +74,7 @@ public class ExternalAddressBookServiceImpl implements ExternalAddressBookServic
         try {
             jsonString = objectMapper.writeValueAsString(contact);
             HttpEntity<String> stringHttpEntity = new HttpEntity<>(jsonString, httpHeaders);
-            String responseEntity = restTemplate.postForObject(uri + "/customer_save/isRemote=n", stringHttpEntity, String.class);
+            String responseEntity = restTemplate.postForObject(uri + "/saveContact/false", stringHttpEntity, String.class);
             contactDTO = objectMapper.readValue(responseEntity, ContactDTO.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
