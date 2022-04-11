@@ -22,11 +22,15 @@ import static org.jboss.logging.Logger.Level.WARN;
 @RestController
 @RequestMapping(value = "/addressBook")
 public class ExcelUploadDownloadController {
+
+    static final String ADDRESS_BOOK_DOWNLOAD_SWAGGER_DEFINITION = "Download Address Book From Database To Excel File";
+    static final String ADDRESS_BOOK_UPLOAD_SWAGGER_DEFINITION = "Upload Address Book From Excel To Database";
+
     @Autowired
     ExcelServiceImpl fileService;
 
 
-    @ApiOperation("Download Address Book From Database To Excel File")
+    @ApiOperation(ADDRESS_BOOK_DOWNLOAD_SWAGGER_DEFINITION)
     @GetMapping(path = "/download")
     public ResponseEntity<Resource> downloadAddressBookToExcelFile() {
         String filename = "Address_Book.xlsx";
@@ -39,7 +43,7 @@ public class ExcelUploadDownloadController {
     }
 
 
-    @ApiOperation("Upload Address Book From Excel To Database")
+    @ApiOperation(ADDRESS_BOOK_UPLOAD_SWAGGER_DEFINITION)
     @PostMapping("/upload")
     public ResponseEntity<String> uploadAddressBookExcelFileToDatabase(@RequestParam("file") MultipartFile multipartFile) throws IOException {
 

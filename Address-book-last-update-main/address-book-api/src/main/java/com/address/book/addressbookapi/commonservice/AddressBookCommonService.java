@@ -5,12 +5,12 @@ import com.address.book.addressbookapi.dto.ContactDTO;
 import java.util.List;
 
 public interface AddressBookCommonService {
-    List<ContactDTO> getAllAddressBook(boolean isConnectingToExternalMachine);
+    List<ContactDTO> getAllAddressBook(Boolean isConnectingToExternalMachine);
 
-    List<ContactDTO> getAddressByFirstName(String firstName, boolean isConnectingToExternalMachine);
+    List<ContactDTO> getAddressByFirstName(String firstName, Boolean isConnectingToExternalMachine);
 
-    ContactDTO saveAddress(ContactDTO contactDTO, boolean isConnectingToExternalMachine);
+    ContactDTO saveAddress(ContactDTO contactDTO, Boolean isConnectingToExternalMachine);
 
-    void updateAddressBook(Long contactId, boolean isConnectingToExternalMachine);
+    void updateAddressBook(Long contactId, Boolean isConnectingToExternalMachine);
 
 }

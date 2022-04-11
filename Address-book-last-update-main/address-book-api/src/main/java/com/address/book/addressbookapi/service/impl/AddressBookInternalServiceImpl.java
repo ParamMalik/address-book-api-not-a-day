@@ -23,7 +23,7 @@ public class AddressBookInternalServiceImpl implements AddressBookInternalServic
 
     // Save New
     @Override
-    public ContactDTO saveAddress(ContactDTO contactDTO) {
+    public ContactDTO saveContactInAddressBook(ContactDTO contactDTO) {
         log.info("executing saveAddress() Method in AddressBookInternalServiceImpl");
         ContactEntity save = contactRepository.save(DtoAndEntityMapper.MAPPER.dtoToEntity(contactDTO));
         return DtoAndEntityMapper.MAPPER.entityToDto(save);
@@ -32,7 +32,7 @@ public class AddressBookInternalServiceImpl implements AddressBookInternalServic
 
     // Get All Address
     @Override
-    public List<ContactDTO> getListOfAddress() {
+    public List<ContactDTO> getListOfContactsFromAddressBook() {
 
         log.info("executing getListOfAddress() Method in AddressBookInternalServiceImpl");
         List<ContactEntity> allContacts = contactRepository.findAll();
@@ -45,29 +45,29 @@ public class AddressBookInternalServiceImpl implements AddressBookInternalServic
 
     // Get Address By firstName
     @Override
-    public List<ContactDTO> findAddressByFirstName(String firstName) {
+    public List<ContactDTO> findContactFromAddressBookByFirstName(String firstName) {
 
         log.info("executing findAddressByFirstName() Method in AddressBookInternalServiceImpl");
-        List<ContactEntity> byFirstName = contactRepository.findByFirstName(firstName);
-        if (byFirstName.isEmpty()) {
+        List<ContactEntity> listOfContacts = contactRepository.findByFirstName(firstName);
+        if (listOfContacts.isEmpty()) {
             throw new ContactNotFoundInDatabaseException();
         }
 
-        return DtoAndEntityMapper.MAPPER.contactEntityListToDto(byFirstName);
+        return DtoAndEntityMapper.MAPPER.contactEntityListToDto(listOfContacts);
 
 
     }
 
     // Delete Address By changing the status
     @Override
-    public void deleteContact(Long customerId) {
+    public void deleteContactFromAddressBook(Long customerId) {
         log.info("executing deleteContact() Method in AddressBookInternalServiceImpl");
-        ContactEntity byContactId = contactRepository.findByContactId(customerId);
-        if (byContactId == null) {
+        ContactEntity contactEntityById = contactRepository.findByContactId(customerId);
+        if (contactEntityById == null) {
             throw new ContactIdNotPresentException();
         }
-        byContactId.setIsActive("N");
-        contactRepository.save(byContactId);
+        contactEntityById.setIsActive("N");
+        contactRepository.save(contactEntityById);
 
     }
 

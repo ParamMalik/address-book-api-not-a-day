@@ -33,7 +33,7 @@ import static org.jboss.logging.Logger.Level.WARN;
 
 public class ExcelServiceImpl implements ExcelService {
     @Autowired
-    ContactRepository repository;
+    ContactRepository contactRepository;
 
     @Autowired
     JdbcTemplateBulkOperations jdbcTemplateBulkOperations;
@@ -42,11 +42,11 @@ public class ExcelServiceImpl implements ExcelService {
     @Override
     public ByteArrayInputStream loadDataFromDatabase() {
         log.info("Executing loadDataFromDatabase() method of ExcelServiceImpl class");
-        List<ContactEntity> contacts = repository.findAll();
-        if (contacts.isEmpty()) {
+        List<ContactEntity> allContactsListFromAddressBook = contactRepository.findAll();
+        if (allContactsListFromAddressBook.isEmpty()) {
             throw new EmptyDatabaseException();
         } else {
-            return ExcelHelper.contactsToExcel(contacts);
+            return ExcelHelper.contactsToExcel(allContactsListFromAddressBook);
         }
 
     }
@@ -54,12 +54,12 @@ public class ExcelServiceImpl implements ExcelService {
     @Override
     public void uploadExcelDataToDatabase(MultipartFile multipartFile) throws IOException {
         log.info("Executing uploadExcelDataToDatabase() method of ExcelServiceImpl class");
-        List<ContactEntity> contactEntityList = ExcelHelper.convertExcelToListOfProduct(multipartFile.getInputStream());
+        List<ContactEntity> contactsListFromExcelSheet = ExcelHelper.convertExcelToListOfProduct(multipartFile.getInputStream());
 
         Logger logger = LoggerFactory.logger(ExcelUploadDownloadController.class);
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        jdbcTemplateBulkOperations.bulkPersist(contactEntityList);
+        jdbcTemplateBulkOperations.bulkPersist(contactsListFromExcelSheet);
         stopWatch.stop();
         logger.log(INFO, "Saving Data Time ----->> ");
         logger.log(WARN, stopWatch.getTotalTimeSeconds());
@@ -74,8 +74,8 @@ public class ExcelServiceImpl implements ExcelService {
         XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
 
         XSSFSheet sheet = workbook.getSheet("Address_Book");
-        List<ContactDTO> contacts = Poiji.fromExcel(sheet, ContactDTO.class);
-        List<ContactEntity> contactEntities = DtoAndEntityMapper.MAPPER.dtoListTOEntityList(contacts);
+        List<ContactDTO> listOfAllContactsFromExcelSheet = Poiji.fromExcel(sheet, ContactDTO.class);
+        List<ContactEntity> contactEntities = DtoAndEntityMapper.MAPPER.dtoListTOEntityList(listOfAllContactsFromExcelSheet);
         jdbcTemplateBulkOperations.bulkPersist(contactEntities);
 
     }

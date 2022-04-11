@@ -19,41 +19,41 @@ public class AddressBookCommonServiceImpl implements AddressBookCommonService {
     AddressBookInternalServiceImpl addressBookInternalService;
 
     @Override
-    public List<ContactDTO> getAllAddressBook(boolean isConnectingToExternalMachine) {
-        if (isConnectingToExternalMachine) {
+    public List<ContactDTO> getAllAddressBook(Boolean isConnectingToExternalMachine) {
+        if (Boolean.TRUE.equals(isConnectingToExternalMachine)) {
             return List.of(externalAddressBookService.getContactList());
         } else {
-            return addressBookInternalService.getListOfAddress();
+            return addressBookInternalService.getListOfContactsFromAddressBook();
         }
     }
 
     @Override
-    public List<ContactDTO> getAddressByFirstName(String firstName, boolean isConnectingToExternalMachine) {
-        if (isConnectingToExternalMachine) {
+    public List<ContactDTO> getAddressByFirstName(String firstName, Boolean isConnectingToExternalMachine) {
+        if (Boolean.TRUE.equals(isConnectingToExternalMachine)) {
             return List.of(externalAddressBookService.getContactListByFirstName(firstName));
         } else {
-            return addressBookInternalService.findAddressByFirstName(firstName);
+            return addressBookInternalService.findContactFromAddressBookByFirstName(firstName);
         }
 
 
     }
 
     @Override
-    public ContactDTO saveAddress(ContactDTO contactDTO, boolean isConnectingToExternalMachine) {
-        if (isConnectingToExternalMachine) {
+    public ContactDTO saveAddress(ContactDTO contactDTO, Boolean isConnectingToExternalMachine) {
+        if (Boolean.TRUE.equals(isConnectingToExternalMachine)) {
             return externalAddressBookService.saveContact(contactDTO);
         } else {
-            return addressBookInternalService.saveAddress(contactDTO);
+            return addressBookInternalService.saveContactInAddressBook(contactDTO);
         }
 
     }
 
     @Override
-    public void updateAddressBook(Long contactId, boolean isConnectingToExternalMachine) {
-        if (isConnectingToExternalMachine) {
+    public void updateAddressBook(Long contactId, Boolean isConnectingToExternalMachine) {
+        if (Boolean.TRUE.equals(isConnectingToExternalMachine)) {
             externalAddressBookService.deleteContact(contactId);
         } else {
-            addressBookInternalService.deleteContact(contactId);
+            addressBookInternalService.deleteContactFromAddressBook(contactId);
         }
 
     }

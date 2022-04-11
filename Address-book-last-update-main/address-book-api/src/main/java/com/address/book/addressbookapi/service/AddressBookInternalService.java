@@ -7,14 +7,14 @@ import java.util.List;
 public interface AddressBookInternalService {
 
     // To add a new Contact
-    ContactDTO saveAddress(ContactDTO contactDTO);
+    ContactDTO saveContactInAddressBook(ContactDTO contactDTO);
 
     // To get List Of all contacts
-    List<ContactDTO> getListOfAddress();
+    List<ContactDTO> getListOfContactsFromAddressBook();
 
     // To find contact by firstName
-    List<ContactDTO> findAddressByFirstName(String firstName);
+    List<ContactDTO> findContactFromAddressBookByFirstName(String firstName);
 
     // To delete address (Not hard delete)
-    void deleteContact(Long customerId);
+    void deleteContactFromAddressBook(Long customerId);
 }

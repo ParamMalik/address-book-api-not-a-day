@@ -9,5 +9,10 @@
       "name": "address.uri",
       "type": "java.lang.String",
       "description": "Description for address.uri."
+    },
+    {
+      "name": "externalAddressBook.uri",
+      "type": "java.lang.String",
+      "description": "Description for externalAddressBook.uri."
     }
   ] }
